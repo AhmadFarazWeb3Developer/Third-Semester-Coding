@@ -1,0 +1,89 @@
+#include <iostream>
+#include <iterator>
+using namespace std;
+class Node {
+public:
+  int data;
+  Node *nextAddress;
+
+  Node(int data) {
+    this->data = data;
+    this->nextAddress = NULL;
+  }
+  ~Node() {
+
+    if (this->nextAddress != NULL) {
+      delete nextAddress;
+      this->nextAddress = NULL;
+    }
+    cout << "Node is deleted with data : " << this->data << endl;
+  }
+};
+
+void insertNode(Node *&tail, int element, int data) {
+  // if list is empty
+  if (tail == NULL) {
+    Node *newNode = new Node(data);
+    tail = newNode;
+    newNode->nextAddress = newNode;
+  }
+  // if list is'nt empty
+
+  else {
+    Node *currentNode = tail;
+    while (currentNode->data != element) {
+      currentNode = currentNode->nextAddress;
+    }
+
+    // when element found
+    Node *tempNode = new Node(data);
+    tempNode->nextAddress = currentNode->nextAddress;
+    currentNode->nextAddress = tempNode;
+  }
+}
+
+void deleteNode(Node *&tail, int value) {
+  if (tail == NULL) {
+    cout << "List is empty ";
+    return;
+  } else {
+    Node *prevNode = tail;
+    Node *currNode = prevNode->nextAddress;
+    while (currNode->data != value) {
+      prevNode = currNode;
+      currNode = currNode->nextAddress;
+    }
+
+    prevNode->nextAddress = currNode->nextAddress;
+    if (tail == currNode) {
+      tail = prevNode;
+    }
+    currNode->nextAddress = NULL;
+    delete currNode;
+  }
+}
+
+void Display(Node *&tail) {
+
+  Node *temp = tail;
+  do {
+    cout << tail->data << " ";
+    tail = tail->nextAddress;
+  } while (tail != temp);
+  cout << endl;
+}
+
+int main() {
+  Node *tail = NULL;
+  insertNode(tail, 1, 2);
+  insertNode(tail, 2, 3);
+  insertNode(tail, 3, 4);
+  insertNode(tail, 4, 5);
+  insertNode(tail, 5, 6);
+  insertNode(tail, 6, 7);
+  insertNode(tail, 7, 8);
+  Display(tail);
+  deleteNode(tail, 2);
+  deleteNode(tail, 7);
+  Display(tail);
+}
